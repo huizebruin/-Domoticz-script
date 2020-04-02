@@ -1,10 +1,7 @@
 #!/bin/bash
 
 #setup
-host=192.168.178.234
-port=8080
-user=wobbe
-pass=molenweg55
+host='192.168.178.234:8080' #IP and port of Domoticz
 #idx for download, upload and ping
 idxdl=11361
 idxul=11362
@@ -18,11 +15,10 @@ idxbb=11363
 # speedtest-cli --simple --server $serverst > outst.txt
 speedtest-cli --simple > speedtest.txt
 
-#version that does not write a tempfile to disk
-speedtest=$(speedtest-cli --simple)
-png=$(echo "$speedtest" | sed -ne 's/^Ping: \([0-9]*\.[0-9]*\).*/\1/p')
-download=$(echo "$speedtest" | sed -ne 's/^Download: \([0-9]*\.[0-9]*\).*/\1/p')
-upload=$(echo "$speedtest" | sed -ne 's/^Upload: \([0-9]*\.[0-9]*\).*/\1/p')
+download=$(cat speedtest.txt | sed -ne 's/^Download: \([0-9]*\.[0-9]*\).*/\1/p')
+upload=$(cat speedtest.txt | sed -ne 's/^Upload: \([0-9]*\.[0-9]*\).*/\1/p')
+png=$(cat speedtest.txt | sed -ne 's/^Ping: \([0-9]*\.[0-9]*\).*/\1/p')
+
 # output if you run it manually
 echo "Download = $download Mbps"
 echo "Upload =  $upload Mbps"
@@ -37,6 +33,4 @@ wget -q --delete-after "http://$host/json.htm?type=command&param=udevice&idx=$id
 wget -q --delete-after "http://$host/json.htm?type=command&param=udevice&idx=$idxbb&svalue=0" >/dev/null 2>&1
 
 # Domoticz logging
-wget -q --delete-after "http://$host/json.htm?type=addlogmessage&message=speedtest.net-logging" >/dev/null 2>&1
-
-exit 0
+wget -q --delete-after "http://$host/json.htm?type=command&param=addlogmessage&message=speedtest.net-logging" >/dev/null 2>&1
