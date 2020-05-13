@@ -12,9 +12,8 @@ lua_path = "/home/pi/domoticz/scripts/lua/"
 
 commandArray = {}
 
---if (time.min % 1)==0 then dofile(lua_path.."script_time_upload_to_PVoutput.lua") end
+if (time.min % 1)==0 then dofile(lua_path.."script_time_upload_to_PVoutput.lua") end
 if (time.min % 5)==0 then dofile(lua_path.."script_time_sunrisesunset.lua") end
-if (time.min % 5)==0 then dofile(lua_path.."script_time_huiskamer.lua") end
 
 
 return commandArray
